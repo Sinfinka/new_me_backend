@@ -5,20 +5,35 @@ const sendEmail = async (req, res) => {
   const { name, phone } = req.body;
 
   const transporter = nodemailer.createTransport({
-    host: "smtp.meta.ua",
-    port: 465,
-    secure: true,
+    service: "SendGrid",
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: "apikey",
+      pass: process.env.SENDGRID_API_KEY,
     },
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: "inadaradar@gmail.com",
+    from: process.env.GMAIL_USER,
+    to: process.env.GMAIL_USER,
     subject: "Нова заявка на зворотний дзвінок",
-    text: `Ім'я: ${name}\nТелефон: ${phone}`,
+    html: `
+      <html>
+        <body>
+          <h2>Нова заявка на зворотний дзвінок</h2>
+          <p><strong>Ім'я:</strong> ${name}</p>
+          <p><strong>Телефон:</strong> ${phone}</p>
+          <p><em>Заявка була залишена: ${new Date().toLocaleString()}</em></p>
+        </body>
+      </html>
+    `,
+    text: `
+      Нова заявка на зворотний дзвінок
+  
+      Ім'я: ${name}
+      Телефон: ${phone}
+  
+      Заявка була залишена: ${new Date().toLocaleString()}
+    `,
   };
 
   try {
