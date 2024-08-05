@@ -12,27 +12,38 @@ const sendEmail = async (req, res) => {
     },
   });
 
+  const options = {
+    timeZone: "Europe/Kiev",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  const date = new Date().toLocaleString("uk-UA", options);
+
   const mailOptions = {
     from: process.env.GMAIL_USER,
-    to: process.env.GMAIL_USER,
+    to: [process.env.GMAIL_USER, process.env.GMAIL_USER_RESERV],
     subject: "Нова заявка на зворотний дзвінок",
     html: `
       <html>
         <body>
-          <h2>Нова заявка на зворотний дзвінок</h2>
+          <h2>Нова заявка на зворотній дзвінок</h2>
           <p><strong>Ім'я:</strong> ${name}</p>
           <p><strong>Телефон:</strong> ${phone}</p>
-          <p><em>Заявка була залишена: ${new Date().toLocaleString()}</em></p>
+          <p><em>Заявка була залишена: ${date}</em></p>
         </body>
       </html>
     `,
     text: `
       Нова заявка на зворотний дзвінок
-  
+
       Ім'я: ${name}
       Телефон: ${phone}
-  
-      Заявка була залишена: ${new Date().toLocaleString()}
+
+      Заявка була залишена: ${date}
     `,
   };
 
